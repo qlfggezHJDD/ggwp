@@ -1,0 +1,6 @@
+{
+  "name": "ggwp",
+  "private": true,
+  "type": "module",
+  "dependencies": { "resend": "latest" }
+}
