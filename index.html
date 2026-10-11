@@ -9,14 +9,13 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#0f0f0f;--paper:#f7f7f7}}
 *{box-sizing:border-box}html{scroll-padding-top:80px;scroll-behavior:smooth}html,body{overflow-x:clip}
 body{margin:0;background:var(--paper);color:var(--ink);font:21px/1.4 'Patrick Hand','Comic Sans MS',cursive}
-#c{position:fixed;inset:0;width:100%;height:100%;z-index:0}
-main{position:relative;z-index:1;filter:url(#boil);max-width:680px;margin:0 auto;padding:0 22px;text-align:center}
+main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 22px;text-align:center}
 section{padding:6vh 0}
 h1,h2,h3,.btn,nav a.lg,label,summary{font-family:'Permanent Marker','Marker Felt',cursive;font-weight:400;margin:0}
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin:14px 0 0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:center;align-items:center;background:rgba(247,247,247,.96);border:3px solid var(--ink);border-radius:255px 12px 225px 12px/12px 225px 12px 255px;box-shadow:5px 5px 0 var(--ink)}
 nav a{color:var(--ink);text-decoration:none;font-size:19px}nav a:hover{text-decoration:underline wavy}nav a.lg{font-size:22px}
 .hp{position:absolute;left:18px;right:18px;bottom:-17px;height:11px;border:2px solid var(--ink);background:var(--paper)}
-.hp i{display:block;height:100%;width:0;background:var(--hatch);border-right:2px solid var(--ink)}
+.hp i{display:block;height:100%;width:100%;background:var(--hatch);clip-path:inset(0 100% 0 0)}
 .logo{margin:0;line-height:0}.logo img{width:min(560px,88vw);height:auto;display:block}.nl{height:34px;width:auto;display:block}.fl{margin-top:6vh}.fl img{width:min(520px,90vw);height:auto}
 .hero{min-height:86vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
 h1{font-size:clamp(60px,17vw,130px);line-height:.95;letter-spacing:-2px}
@@ -39,7 +38,7 @@ svg.und{width:min(480px,80vw);height:28px;display:block;margin:-2px auto 0}
 .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
 .tape{width:112vw;margin:5vh 0 5vh calc(50% - 56vw);transform:rotate(-2deg);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap}
 .tape.r{transform:rotate(1.5deg)}.tape.r .tk{animation-direction:reverse}
-.tk{display:inline-block;animation:tp 24s linear infinite;font:32px/1.7 'Permanent Marker',cursive}@keyframes tp{to{transform:translateX(-50%)}}
+.tk{will-change:transform;display:inline-block;animation:tp 24s linear infinite;font:32px/1.7 'Permanent Marker',cursive}@keyframes tp{to{transform:translateX(-50%)}}
 .dd{display:block;margin:0 auto;width:200px;height:44px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 24px}
 .stat{border:3px solid var(--ink);border-radius:14px 225px 14px 255px/255px 14px 225px 14px;background:rgba(247,247,247,.96);padding:14px 6px;box-shadow:4px 4px 0 rgba(0,0,0,.25)}
@@ -68,10 +67,25 @@ input:focus,textarea:focus{box-shadow:4px 4px 0 var(--ink)}
 .big{font:clamp(80px,26vw,190px)/.9 'Permanent Marker',cursive;letter-spacing:-4px;margin-top:6vh}
 footer{padding:4vh 0 8vh}.k{color:var(--mute);font-size:18px}
 .rv{opacity:0;transform:translateY(30px) rotate(1deg);transition:opacity .6s,transform .6s cubic-bezier(.2,.9,.3,1.3)}.rv.on{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.rv{transition:none}.und path{animation:none;stroke-dashoffset:0}.tk,.arm{animation:none}}
+@media (prefers-reduced-motion:reduce){.box,.cov,.stat,.btn,.tg,.cc,nav,.logo img,.nl,.fl img{animation:none}.rv{transition:none}.und path{animation:none;stroke-dashoffset:0}.tk,.arm{animation:none}}
+
+/* cheap "line boil": jitter at ~9fps with compositor-friendly props (no SVG filter) */
+@keyframes bo{0%{rotate:-.3deg;translate:0 0}34%{rotate:.25deg;translate:.6px -.5px}67%{rotate:-.12deg;translate:-.5px .6px}}
+.box,.cov,.stat,.btn,.tg,.cc,nav,.logo img,.nl,.fl img{animation:bo .36s steps(1) infinite}
+.box:nth-child(2n),.stat:nth-child(2n),.cc:nth-child(2n){animation-delay:-.12s}.box:nth-child(3n),.btn:nth-child(2n),.cc:nth-child(3n){animation-delay:-.24s}
+.mg{position:fixed;top:0;bottom:0;left:66px;width:8px;z-index:0;pointer-events:none;background-repeat:repeat-y;background-size:8px 480px}
+.dl{position:fixed;inset:0;z-index:0;pointer-events:none}.dl svg{position:absolute;width:36px;height:36px}.dl svg *{fill:none;stroke:#9a9a9a;stroke-width:2;stroke-linecap:round}
+/* hand-drawn cursor */
+html:not(.cc-on) #cur{display:none}html.cc-on,html.cc-on *{cursor:none}html.cc-on input,html.cc-on textarea{cursor:text}
+#cur{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:999;will-change:transform;transition:opacity .12s}#cur.out,#cur.tx{opacity:0}
+#cur svg{position:absolute;overflow:visible}#cur path{stroke:#0f0f0f;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#cur .v{visibility:hidden}#cur[data-k="0"] .v0,#cur[data-k="1"] .v1,#cur[data-k="2"] .v2{visibility:visible}
+#cur path.sh{stroke:none}#cur svg{transition:transform .1s}
+#cur .arr{left:-3px;top:-3px;transform-origin:3px 3px}#cur .hand{left:-15px;top:-4px;transform-origin:15px 4px;display:none}
+#cur.hv .hand{display:block}#cur.hv .arr{display:none}#cur.pr svg{transform:scale(.88)}
 </style></head><body>
-<canvas id="c"></canvas>
-<svg width="0" height="0" style="position:absolute"><defs><pattern id="hat" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#0f0f0f" stroke-width="1.6"/></pattern></defs><filter id="boil" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence id="tb" type="fractalNoise" baseFrequency=".02" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></svg>
+<div class="mg"></div><div class="dl" id="dl" aria-hidden="true"></div><div id="cur" class="out" style="transform:translate3d(-99px,-99px,0)" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute"><defs><pattern id="hat" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#0f0f0f" stroke-width="1.6"/></pattern></defs></svg>
 <main>
 <nav><a class="lg" href="#top"><img class="nl" data-logo alt="ggwp.wtf" width="900" height="328"></a><a href="#about">About</a><a href="#games">Games</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><div class="hp"><i id="hp"></i></div></nav>
 
@@ -203,17 +217,37 @@ function gframe(now){const dt=Math.min(.04,(now-glt)/1e3);glt=now;if(seen||st===
   g.fillText(st==='dead'?'Lava got you':'Universal Climbers',320,180);g.font="22px 'Patrick Hand',cursive";g.fillText(st==='dead'?score+' m  ·  best '+best+' m':'tap or press jump to start',320,212);g.fillText(st==='dead'?'tap to retry':'',320,238)}}
  requestAnimationFrame(gframe)}
 requestAnimationFrame(gframe);
-// ---- paper background ----
-const cb=$('c'),x=cb.getContext('2d'),tb=$('tb'),hp=$('hp');let W,H;
-function rs(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cb.width=W*d;cb.height=H*d;x.setTransform(d,0,0,d,0,0)}
-addEventListener('resize',rs);rs();
-function frame(now){const k=Math.floor(now/110)%3;if(k!==tk){tk=k;tb.setAttribute('seed',k+1)}
- const sy=scrollY;x.fillStyle=PAPER;x.fillRect(0,0,W,H);
- const off=sy*.5;for(let i=-1;i<H/40+2;i++){const idx=Math.floor(off/40)+i;ln(x,-5,idx*40-off,W+5,idx*40-off,1.3,idx+tk*50,'#cfcfcf',1.2)}
- ln(x,70,-5,70,H+5,2,5+tk*50,'#9a9a9a',1.5);
- for(let i=0;i<8;i++){const fx=((i*211+40)%860)/860*W,fy=(((i*163-sy*.2*(1+i%2))%580)+580)%580-20;
-  if(i%2)circ(x,fx,fy,8+i,i*5+tk*40);else{ln(x,fx-6,fy-6,fx+6,fy+6,2,i*3+tk*40,'#9a9a9a',.8);ln(x,fx-6,fy+6,fx+6,fy-6,2,i*3+1+tk*40,'#9a9a9a',.8)}}
- hp.style.width=Math.min(100,sy/Math.max(1,document.documentElement.scrollHeight-H)*100)+'%';
- requestAnimationFrame(frame)}
-requestAnimationFrame(frame);
+// ---- paper: 3 pre-rendered hand-drawn frames swapped at ~9fps (no per-frame drawing) ----
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches,fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+const TW=480,SC=Math.min(devicePixelRatio||1,2),PT=[],MT=[];
+for(let v=0;v<3;v++){
+ const c=document.createElement('canvas');c.width=c.height=TW*SC;const t=c.getContext('2d');t.scale(SC,SC);t.strokeStyle='#cfcfcf';t.lineWidth=1.3;t.lineCap='round';
+ for(let i=0;i<TW/40;i++){const y=20+i*40;t.beginPath();for(let j=0;j<=40;j++){const f=j/40,o=h(v*97+i*13+j)*1.3*Math.sin(Math.PI*f);j?t.lineTo(f*TW,y+o):t.moveTo(0,y+o)}t.stroke()}
+ PT.push('url('+c.toDataURL()+')');
+ const m=document.createElement('canvas');m.width=8*SC;m.height=TW*SC;const u=m.getContext('2d');u.scale(SC,SC);u.strokeStyle='#9a9a9a';u.lineWidth=2;u.lineCap='round';u.beginPath();
+ for(let j=0;j<=40;j++){const f=j/40,o=h(v*53+j)*1.5*Math.sin(Math.PI*f);j?u.lineTo(4+o,f*TW):u.moveTo(4,0)}u.stroke();MT.push('url('+m.toDataURL()+')')}
+const mg=document.querySelector('.mg'),cur=$('cur');
+document.body.style.backgroundSize=TW+'px '+TW+'px';
+function paint(k){tk=k;document.body.style.backgroundImage=PT[k];mg.style.backgroundImage=MT[k];cur.dataset.k=k}
+paint(0);if(!calm)setInterval(()=>{if(!document.hidden)paint((tk+1)%3)},110);
+// static doodles in the margins
+$('dl').innerHTML=Array.from({length:8},(_,i)=>`<svg style="left:${(((i*211+40)%860)/8.6).toFixed(1)}%;top:${(((i*163+60)%580)/5.8).toFixed(1)}%" viewBox="0 0 36 36">${i%2?`<ellipse cx="18" cy="18" rx="${8+i%4}" ry="${7+i%3}"/>`:'<path d="M8 8L28 28M8 28L28 8"/>'}</svg>`).join('');
+// scroll bar: only touches a tiny clip-path, throttled to one update per frame
+const hpb=$('hp');let rq=0;function upd(){rq=0;const p=Math.min(1,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight));hpb.style.clipPath=`inset(0 ${(100-p*100).toFixed(1)}% 0 0)`}
+addEventListener('scroll',()=>{rq||(rq=requestAnimationFrame(upd))},{passive:true});addEventListener('resize',upd);upd();
+// ---- hand-drawn pencil cursor ----
+if(fine){document.documentElement.classList.add('cc-on');
+ const J=(n,q,w=.6)=>(n+h(q)*w).toFixed(1),poly=(pts,v,fill,cls='',sx=0)=>`<path class="${cls}" fill="${fill}" d="M${pts.map((q,i)=>J(q[0]+sx,v*31+i*7+q[0])+' '+J(q[1]+sx,v*17+i*5+q[1])).join(' L')} Z"/>`;
+ const A=[[0,0],[0,26],[7,20],[12,31],[17,29],[12,18],[21,18]];
+ const arr=v=>poly(A,v,'rgba(0,0,0,.25)','sh',2.5)+poly(A,v,'#f7f7f7');
+ const HD='M9 7C9 2 17 2 17 7L17 16C19 14 24 14 24 17C27 15 31 16 31 20L31 29C31 34 27 38 21 38L15 38C10 38 7 34 5 30L2 23C1 20 5 19 7 21L9 24ZM17 17V23M24 18V23';
+ const wob=(d,v)=>{let i=0;return d.replace(/-?\d+(\.\d+)?/g,n=>(+n+h(v*13+(i++)*3)*.6).toFixed(1))};
+ const hand=v=>`<path class="sh" fill="rgba(0,0,0,.25)" transform="translate(2.5 2.5)" d="${wob(HD,v)}"/><path fill="#f7f7f7" d="${wob(HD,v)}"/>`;
+ cur.innerHTML=`<svg class="arr" width="30" height="40" viewBox="-3 -3 30 40">${[0,1,2].map(v=>`<g class="v v${v}">${arr(v)}</g>`).join('')}</svg><svg class="hand" width="40" height="46" viewBox="-2 -2 40 46">${[0,1,2].map(v=>`<g class="v v${v}">${hand(v)}</g>`).join('')}</svg>`;
+ let cx=0,cy=0,pend=0;
+ addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;cx=e.clientX;cy=e.clientY;cur.classList.remove('out');if(!pend){pend=1;requestAnimationFrame(()=>{pend=0;cur.style.transform=`translate3d(${cx}px,${cy}px,0)`})}},{passive:true});
+ document.addEventListener('pointerover',e=>{const t=e.target;cur.classList.toggle('hv',!!t.closest('a,button,summary,label,.btn,.cov,.mas,canvas'));cur.classList.toggle('tx',!!t.closest('input,textarea'))});
+ addEventListener('pointerdown',()=>cur.classList.add('pr'));addEventListener('pointerup',()=>cur.classList.remove('pr'));
+ document.documentElement.addEventListener('pointerleave',()=>cur.classList.add('out'));
+}
 </script></body></html>
