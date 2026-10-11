@@ -15,3 +15,9 @@ Static site (`index.html`) + two Vercel functions (`api/contact.js`, `api/subscr
 
 ## Test
 Submit both tabs of the form on the live site, then check your inbox and the Contacts page in Resend.
+
+## Welcome email
+1. Upload `logo.png` to the repo root (the email loads it from https://ggwp.wtf/logo.png).
+2. Resend > Templates > Create template. Paste the contents of `emails/welcome.html`. Publish it.
+3. Copy the template ID (or alias). In Vercel add the env variable WELCOME_TEMPLATE_ID, then redeploy.
+Subject and sender are set in `lib/welcome.js` and `MAIL_FROM`. If you change the HTML, publish the template again in Resend.
